@@ -1,0 +1,10 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<plugin xmlns="http://sdstechnologies.com/jamcast/plugin/manifest/2.0">
+	<providerID>$guid1$</providerID>
+	<name>My Channel</name>
+	<description>Provide a description for your channel here.</description>
+	<publisherName>$registeredorganization$</publisherName>
+	<publisherUrl>http://getjamcast.com</publisherUrl>
+	<iconResourceName>$safeprojectname$.icon.png</iconResourceName>
+	<assemblyFileName>$safeprojectname$.dll</assemblyFileName>	
+</plugin>

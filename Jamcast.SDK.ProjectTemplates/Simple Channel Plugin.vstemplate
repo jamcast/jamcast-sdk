@@ -1,0 +1,41 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<VSTemplate Version="3.0.0" Type="Project" xmlns="http://schemas.microsoft.com/developer/vstemplate/2005" xmlns:sdk="http://schemas.microsoft.com/developer/vstemplate-sdkextension/2010">	
+	<TemplateData>
+		<Name>Simple Channel Plugin</Name>
+		<Description>A project template for creating a simple channel plugin for Jamcast.</Description>
+		<ProjectType>CSharp</ProjectType>
+		<RequiredFrameworkVersion>4.0</RequiredFrameworkVersion>
+		<MaxFrameworkVersion>4.0</MaxFrameworkVersion>
+		<SortOrder>1000</SortOrder>
+		<TemplateID>6d6e3cea-24ff-48a3-afa2-253dce7ae3a2</TemplateID>
+		<DefaultName>SimpleChannelPlugin</DefaultName>
+		<ProvideDefaultName>true</ProvideDefaultName>
+		<LocationField>Enabled</LocationField>
+		<EnableLocationBrowseButton>true</EnableLocationBrowseButton>
+		<Icon>__TemplateIcon.png</Icon>
+		<CreateNewFolder>true</CreateNewFolder>
+	</TemplateData>
+	<TemplateContent>
+		<Project File="ProjectTemplate.csproj" ReplaceParameters="true">
+			<ProjectItem>Jamcast.Extensibility.3.0.0.0.nupkg</ProjectItem>
+			<ProjectItem ReplaceParameters="true">Configuration.cs</ProjectItem>
+			<ProjectItem ReplaceParameters="false">icon.png</ProjectItem>
+			<ProjectItem ReplaceParameters="true" OpenInEditor="true">Plugin.cs</ProjectItem>
+			<ProjectItem ReplaceParameters="true">plugin.xml</ProjectItem>
+			<ProjectItem ReplaceParameters="true" TargetFileName="Properties\AssemblyInfo.cs">AssemblyInfo.cs</ProjectItem>
+			<Folder Name="Renderers" TargetFolderName="Renderers">
+				<ProjectItem ReplaceParameters="true">RootRenderer.cs</ProjectItem>
+				<ProjectItem ReplaceParameters="true">TrackRenderer.cs</ProjectItem>
+			</Folder>
+		</Project>
+	</TemplateContent>
+	<WizardExtension>
+		<Assembly>NuGet.VisualStudio.Interop, Version=1.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</Assembly>
+		<FullClassName>NuGet.VisualStudio.TemplateWizard</FullClassName>
+	</WizardExtension>
+	<WizardData>
+		<packages repository="template">
+			<package id="Jamcast.Extensibility" version="3.0.0.0" />
+		</packages>
+	</WizardData>
+</VSTemplate>

@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Wix xmlns="http://schemas.microsoft.com/wix/2006/wi" xmlns:VSExtension="http://schemas.microsoft.com/wix/VSExtension">
+
+	<Product Id="*" Name="Jamcast SDK" Language="1033" Version="1.0.0.0" Manufacturer="Jamcast, Inc." UpgradeCode="74357dd7-0d51-440d-9389-575d67b7d729">
+		<Package InstallerVersion="200" Compressed="yes" InstallScope="perMachine" />
+		<Icon Id="JamcastIcon" SourceFile="program.ico" />
+		<Property Id="ARPPRODUCTICON" Value="JamcastIcon" />
+		<WixVariable Id="WixUIBannerBmp" Value="banner.bmp" />
+		<WixVariable Id="WixUIDialogBmp" Value="dialog.bmp" />
+		<MajorUpgrade AllowDowngrades="no" DowngradeErrorMessage="A newer version of [ProductName] is already installed." AllowSameVersionUpgrades="no" />
+		<MediaTemplate />
+		<PropertyRef Id="VS2013_EXTENSIONS_DIR" />		
+		<Condition Message="[ProductName] requires Visual Studio 2013 to installed.">
+			VS2013_EXTENSIONS_DIR
+		</Condition>
+		<Feature Id="ProductFeature" Title="Jamcast SDK" Level="1">
+			<ComponentGroupRef Id="ProductComponents" />
+		</Feature>
+		<CustomAction Id='VS2013TouchExtensions'
+              Directory='VS2013_EXTENSIONS_DIR'
+              Execute="deferred"
+              Impersonate="no"
+              ExeCommand='[SystemFolder]cmd.exe /c &quot;copy /b extensions.configurationchanged +,,&quot;'
+              Return='ignore' />				
+		<InstallExecuteSequence>
+			<Custom Action="VS2013TouchExtensions" Before="InstallFinalize" />			
+		</InstallExecuteSequence>		
+		<UI>
+			<TextStyle Id="WixUI_Font_Normal" FaceName="Tahoma" Size="8" />
+			<TextStyle Id="WixUI_Font_Bigger" FaceName="Tahoma" Size="12" />
+			<TextStyle Id="WixUI_Font_Title" FaceName="Tahoma" Size="9" Bold="yes" />
+
+			<Property Id="DefaultUIFont" Value="WixUI_Font_Normal" />
+			<Property Id="WixUI_Mode" Value="Minimal" />
+			<Property Id="WIXUI_EXITDIALOGOPTIONALTEXT" Value="Please restart any running instances of Visual Studio for changes to take effect." />
+
+			<DialogRef Id="ErrorDlg" />
+			<DialogRef Id="FatalError" />
+			<DialogRef Id="FilesInUse" />
+			<DialogRef Id="MsiRMFilesInUse" />
+			<DialogRef Id="PrepareDlg" />
+			<DialogRef Id="ProgressDlg" />
+			<DialogRef Id="ResumeDlg" />
+			<DialogRef Id="UserExit" />
+
+			<Publish Dialog="ExitDialog" Control="Finish" Event="EndDialog" Value="Return" Order="999">1</Publish>
+			<Publish Dialog="WelcomeDlg" Control="Next" Event="NewDialog" Value="PrepareDlg">1</Publish>
+		</UI>
+		<UIRef Id="WixUI_Common" />		
+	</Product>
+
+	<Fragment>
+		<Directory Id="TARGETDIR" Name="SourceDir">
+			<Directory Id="ProgramFilesFolder">
+				<Directory Id="SDKINSTALLFOLDER" Name="Jamcast.SDK" />
+			</Directory>
+			<Directory Id="VS2013_EXTENSIONS_DIR">
+				<Directory Id="Jamcast" Name="Jamcast">
+					<Directory Id="EXTENSIONINSTALLFOLDER" Name="JamcastSDK" ComponentGuidGenerationSeed="{828DA0CF-68B4-478D-9F04-1561A97141B2}">
+						<Directory Id="ProjectTemplates" Name="ProjectTemplates">
+							<Directory Id="CSharp" Name="CSharp">
+								<Directory Id="Jamcast2" Name="Jamcast">
+									<Directory Id="PROJECTTEMPLATESINSTALLFOLDER" Name="1033" />
+								</Directory>
+							</Directory>
+						</Directory>
+						<Directory Id="ItemTemplates" Name="ItemTemplates">
+							<Directory Id="CSharp2" Name="CSharp">
+								<Directory Id="Jamcast3" Name="Jamcast">
+									<Directory Id="ITEMTEMPLATESINSTALLFOLDER" Name="1033" />
+								</Directory>
+							</Directory>
+						</Directory>
+					</Directory>
+				</Directory>
+			</Directory>
+		</Directory>
+	</Fragment>
+
+	<Fragment>
+		<ComponentGroup Id="ProductComponents">
+			<Component Id="VSExtensions"  Directory="EXTENSIONINSTALLFOLDER" Guid="{3A1513AF-6075-4D1C-81DB-588E5F74E289}">
+				<File Source="$(var.Jamcast.SDK.Extensions.TargetDir)extension.vsixmanifest" />
+				<File Source="$(var.Jamcast.SDK.Extensions.TargetDir)jc_icon.png" />
+			</Component>
+			<Component Id="BuildTasks" Directory="SDKINSTALLFOLDER">
+				<File Source="$(var.Jamcast.SDK.BuildTasks.TargetPath)" Assembly=".net" />
+			</Component>
+			<Component Id="ProjectTemplates" Directory="PROJECTTEMPLATESINSTALLFOLDER">
+				<File Source="$(var.Jamcast.SDK.ProjectTemplates.TargetDir)\ProjectTemplates\CSharp\Jamcast\1033\Simple Channel Plugin.zip" />
+			</Component>
+			<Component Id="ItemTemplates" Directory="ITEMTEMPLATESINSTALLFOLDER">
+				<File Source="$(var.Jamcast.SDK.ItemTemplates.TargetDir)\ItemTemplates\CSharp\Jamcast\1033\Jamcast.SDK.ItemTemplates.zip" />
+			</Component>
+		</ComponentGroup>
+	</Fragment>
+</Wix>

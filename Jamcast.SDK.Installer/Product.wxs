@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Wix xmlns="http://schemas.microsoft.com/wix/2006/wi" xmlns:VSExtension="http://schemas.microsoft.com/wix/VSExtension">
 
-	<Product Id="*" Name="Jamcast SDK" Language="1033" Version="1.0.0.0" Manufacturer="Jamcast, Inc." UpgradeCode="74357dd7-0d51-440d-9389-575d67b7d729">
+	<Product Id="*" Name="Jamcast SDK" Language="1033" Version="1.1.0.0" Manufacturer="Jamcast, Inc." UpgradeCode="74357dd7-0d51-440d-9389-575d67b7d729">		
 		<Package InstallerVersion="200" Compressed="yes" InstallScope="perMachine" />
 		<Icon Id="JamcastIcon" SourceFile="program.ico" />
 		<Property Id="ARPPRODUCTICON" Value="JamcastIcon" />
 		<WixVariable Id="WixUIBannerBmp" Value="banner.bmp" />
 		<WixVariable Id="WixUIDialogBmp" Value="dialog.bmp" />
 		<MajorUpgrade AllowDowngrades="no" DowngradeErrorMessage="A newer version of [ProductName] is already installed." AllowSameVersionUpgrades="no" />
-		<MediaTemplate />
+		<MediaTemplate EmbedCab="yes" />
 		<PropertyRef Id="VS2013_EXTENSIONS_DIR" />		
 		<Condition Message="[ProductName] requires Visual Studio 2013 to installed.">
 			VS2013_EXTENSIONS_DIR
@@ -16,6 +16,8 @@
 		<Feature Id="ProductFeature" Title="Jamcast SDK" Level="1">
 			<ComponentGroupRef Id="ProductComponents" />
 		</Feature>
+		<Property Id="ARPNOREPAIR" Value="yes" Secure="yes" />
+		<Property Id="ARPNOMODIFY" Value="yes" Secure="yes" />
 		<CustomAction Id='VS2013TouchExtensions'
               Directory='VS2013_EXTENSIONS_DIR'
               Execute="deferred"
@@ -52,7 +54,9 @@
 	<Fragment>
 		<Directory Id="TARGETDIR" Name="SourceDir">
 			<Directory Id="ProgramFilesFolder">
-				<Directory Id="SDKINSTALLFOLDER" Name="Jamcast.SDK" />
+				<Directory Id="MSBuild" Name="MSBuild">
+					<Directory Id="MSBUILDINSTALLFOLDER" Name="Jamcast" />						
+				</Directory>							
 			</Directory>
 			<Directory Id="VS2013_EXTENSIONS_DIR">
 				<Directory Id="Jamcast" Name="Jamcast">
@@ -83,8 +87,9 @@
 				<File Source="$(var.Jamcast.SDK.Extensions.TargetDir)extension.vsixmanifest" />
 				<File Source="$(var.Jamcast.SDK.Extensions.TargetDir)jc_icon.png" />
 			</Component>
-			<Component Id="BuildTasks" Directory="SDKINSTALLFOLDER">
-				<File Source="$(var.Jamcast.SDK.BuildTasks.TargetPath)" Assembly=".net" />
+			<Component Id="BuildTasks" Directory="MSBUILDINSTALLFOLDER">
+				<File Source="$(var.Jamcast.SDK.BuildTasks.TargetPath)" />
+				<File Source="$(var.Jamcast.SDK.BuildTasks.TargetDir)\Jamcast.SDK.targets" />
 			</Component>
 			<Component Id="ProjectTemplates" Directory="PROJECTTEMPLATESINSTALLFOLDER">
 				<File Source="$(var.Jamcast.SDK.ProjectTemplates.TargetDir)\ProjectTemplates\CSharp\Jamcast\1033\Simple Channel Plugin.zip" />
